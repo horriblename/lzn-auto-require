@@ -5,14 +5,17 @@ proper plugin initialization.
 
 ## Usage
 
-**Recommended**: place this code in `after/plugin/lzn-auto-require.lua`. It's easy to accidentally
-require a module in the init stage, which defeats the purpose of lazy loading. Registering the
-loader as late as possible reduces such mistakes. This is not always feasible for everyone, but you
-can also put this in your init.lua normally
+Place this code somewhere in your config, and call it as **late** as possible (e.g. at the bottom
+of your init.lua). 
 
 ```lua
 require('lzn-auto-require.loader').register_loader()
 ```
 
-Afterwards, any call to `require` will also look for the lua module in `(packpath)/opt/*/lua`,
-and `require("lz.n").trigger_load` will be called if a matching module is found.
+> [!TIP]
+>
+> It's easy to accidentally require a module in your init.lua, which defeats the purpose of lazy
+> loading. Registering the loader as late as possible reduces such mistakes.
+
+After registering the loader, any call to `require` will also look for the lua module in
+`(packpath)/opt/*/lua`.
