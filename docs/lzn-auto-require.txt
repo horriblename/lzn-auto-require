@@ -1,0 +1,12 @@
+Usage                                                 |lzn-auto-require-usage|
+
+    It is recommended to register the loader as late as possible (e.g. at the
+    end of your init.lua), since it's easy to accidentally require a module
+    you wanted to lazy load:
+
+    To register the loader: >lua
+
+        lua require('lzn-auto-require').register_loader()
+<
+
+vim:tw=78:ts=8:sw=4:et:ft=help:norl:
