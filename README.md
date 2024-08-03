@@ -14,8 +14,9 @@ require('lzn-auto-require.loader').register_loader()
 
 > [!TIP]
 >
-> It's easy to accidentally require a module in your init.lua, which defeats the purpose of lazy
-> loading. Registering the loader as late as possible reduces such mistakes.
+> It's easy to accidentally require a module that you want to lazy-load in your init.lua, which
+> defeats the purpose of lazy loading. Registering the loader as late as possible reduces such
+> mistakes.
 
 After registering the loader, any call to `require` will also look for the lua module in
 `(packpath)/opt/*/lua`.
