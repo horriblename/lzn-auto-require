@@ -11,7 +11,7 @@ loader as late as possible reduces such mistakes. This is not always feasible fo
 can also put this in your init.lua normally
 
 ```lua
-require('lzn-auto-require.loader').registerLoader()
+require('lzn-auto-require.loader').register_loader()
 ```
 
 Afterwards, any call to `require` will also look for the lua module in `(packpath)/opt/*/lua`,

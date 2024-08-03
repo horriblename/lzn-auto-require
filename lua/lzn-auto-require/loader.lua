@@ -54,7 +54,7 @@ function M.loaderFactory(pack_name, file_path)
 	end
 end
 
-function M.registerLoader()
+function M.register_loader()
 	table.insert(package.loaders, M.search)
 end
 
