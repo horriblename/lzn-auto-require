@@ -15,27 +15,26 @@ local function find_opt_file(relPaths)
 	for _, packpath in ipairs(vim.opt.packpath:get()) do
 		local groupsPath = vim.fs.joinpath(packpath, 'pack')
 		if vim.fn.isdirectory(groupsPath) == 1 then
-			for group, typ in vim.fs.dir(groupsPath) do
-				if typ == "directory" then
-					-- {pack}/pack/{group}
-					local groupPath = vim.fs.joinpath(groupsPath, group)
+			for group in vim.fs.dir(groupsPath) do
+				-- {pack}/pack/{group}
+				local groupPath = vim.fs.joinpath(groupsPath, group)
 
-					for pack_name, typ in vim.fs.dir(groupPath .. '/opt') do
-						if typ == "directory" then
-							-- {pack}/pack/{group}/opt/{pack_name}
-							local pack_path = vim.fs.joinpath(groupPath, 'opt', pack_name)
+				for pack_name in vim.fs.dir(groupPath .. '/opt') do
+					-- {pack}/pack/{group}/opt/{pack_name}
+					local pack_path = vim.fs.joinpath(groupPath, 'opt', pack_name)
+					if vim.g.lzn_auto_require_debug == 1 then
+						vim.notify("[lzn-auto-reqire] searching in: " .. pack_path)
+					end
 
-							for _, relPath in ipairs(relPaths) do
-								-- {pack}/pack/{group}/opt/{pack_name}/{relPath}
-								local fullPath = vim.fs.joinpath(pack_path, relPath)
-								if vim.fn.filereadable(fullPath) == 1 then
-									return true, fullPath, pack_name
-								end
-
-								table.insert(triedPaths, fullPath)
-							end
+					for _, relPath in ipairs(relPaths) do
+						-- {pack}/pack/{group}/opt/{pack_name}/{relPath}
+						local fullPath = vim.fs.joinpath(pack_path, relPath)
+						if vim.fn.filereadable(fullPath) == 1 then
+							return true, fullPath, pack_name
 						end
 					end
+
+					table.insert(triedPaths, pack_path)
 				end
 			end
 		end
