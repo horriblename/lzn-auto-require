@@ -32,8 +32,18 @@ local function test()
 
 	_G.foo_four_loaded_count = 0
 
-	-- lz.n doesn't lazy load unless there is an "entry" condition
-	lzn.load({ "foo", after = function() print('foo.four loaded:', require('foo.four')) end, cmd = "Fake" })
+	lzn.load({
+		"foo",
+		before = function() _G.before_triggered = true end,
+		after = function()
+			_G.after_triggered = true
+			assertEq(require('foo.four'), 4)
+		end,
+		-- lz.n doesn't lazy load unless there is an "entry" condition
+		cmd = "Fake",
+	})
+
+	assert(require('lz.n.state').plugins.foo, 'state: ' .. vim.inspect(require('lz.n.state')))
 
 	local ok, value = pcall(require, 'foo.four')
 	assertEq(ok, false, "got value:", value, "rtp:", vim.inspect(vim.opt.runtimepath:get()))
@@ -41,7 +51,9 @@ local function test()
 	auto_req.register_loader()
 
 	assertEq(require('foo.four'), 4)
-	assertEq(foo_four_loaded_count, 1)
+	assertEq(foo_four_loaded_count, 1, 'assert module only evaluated once')
+	assertEq(_G.before_triggered, true, 'assert "before" hook is triggered')
+	assertEq(_G.after_triggered, true, 'assert "after" hook is triggered')
 end
 
 test()
