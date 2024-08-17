@@ -1,6 +1,6 @@
 local M = {}
 
----find_opt_file({'lua/x.lua'}) returns the first match of '(packpath)/opt/*/lua/x.lua'
+---find_opt_file({'lua/x.lua'}) returns the first match of '(packpath)/pack/*/opt/{pack_name}/lua/x.lua'
 ---@param relPaths string[] @return string? pack_name, string? full_path
 ---@return boolean found,  string|string[] pathOrTriedPaths, string? pack_name
 local function find_opt_file(relPaths)
@@ -8,36 +8,31 @@ local function find_opt_file(relPaths)
 	-- I need to look for {pack}/pack/*/opt/{pack_name}/lua/...
 	for _, packpath in ipairs(vim.opt.packpath:get()) do
 		local groupsPath = vim.fs.joinpath(packpath, 'pack')
-		if vim.fn.isdirectory(groupsPath) == 0 then
-			goto continue
-		end
+		if vim.fn.isdirectory(groupsPath) == 1 then
+			for group, typ in vim.fs.dir(groupsPath) do
+				if typ == "directory" then
+					-- {pack}/pack/{group}
+					local groupPath = vim.fs.joinpath(groupsPath, group)
 
-		for group, typ in vim.fs.dir(groupsPath) do
-			if typ ~= "directory" then
-				goto continue3
-			end
+					for pack_name, typ in vim.fs.dir(groupPath .. '/opt') do
+						if typ == "directory" then
+							-- {pack}/pack/{group}/opt/{pack_name}
+							local pack_path = vim.fs.joinpath(groupPath, 'opt', pack_name)
 
-			local groupPath = vim.fs.joinpath(groupsPath, group)
-			for pack_name, typ in vim.fs.dir(groupPath .. '/opt') do
-				if typ ~= "directory" then
-					goto continue4
-				end
+							for _, relPath in ipairs(relPaths) do
+								-- {pack}/pack/{group}/opt/{pack_name}/{relPath}
+								local fullPath = vim.fs.joinpath(pack_path, relPath)
+								if vim.fn.filereadable(fullPath) == 1 then
+									return true, fullPath, pack_name
+								end
 
-				local pack_path = vim.fs.joinpath(groupPath, 'opt', pack_name)
-				for _, relPath in ipairs(relPaths) do
-					local fullPath = vim.fs.joinpath(pack_path, relPath)
-					if vim.fn.filereadable(fullPath) == 1 then
-						return true, fullPath, pack_name
+								table.insert(triedPaths, fullPath)
+							end
+						end
 					end
-
-					table.insert(triedPaths, fullPath)
 				end
-
-				::continue4::
 			end
-			::continue3::
 		end
-		::continue::
 	end
 
 	return false, triedPaths
