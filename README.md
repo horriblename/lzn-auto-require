@@ -25,4 +25,4 @@ After registering the loader, any call to `require` will also look for the lua m
 
 Thank you to the lz.n authors for their great work!
 
-Part of the code base uses lz.n, also licensed under GPL-2
+Part of the code base uses code from lz.n, also licensed under GPL-2
