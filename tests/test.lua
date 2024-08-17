@@ -7,7 +7,9 @@ local project_dir = vim.fn.getcwd()
 
 local function assertEq(a, b, ...)
 	if a ~= b then
-		print("Hint", ...)
+		if select("#", ...) > 0 then
+			print("Hint", ...)
+		end
 		local msg = string.format([[assertion a == b failed:
 		a = %s
 		b = %s]], vim.inspect(a), vim.inspect(b)
