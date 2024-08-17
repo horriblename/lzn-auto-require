@@ -4,8 +4,12 @@ local M = {}
 ---@param relPaths string[] @return string? pack_name, string? full_path
 ---@return boolean found,  string|string[] pathOrTriedPaths, string? pack_name
 local function find_opt_file(relPaths)
+	-- note to self: iterators are not helpful, vim.iter lacks flatten for function iterators,
+	-- and trying to write an iterator library for such is absolutely braindead
+	--
+	-- embrace the ugly for loop and forget about it
+
 	local triedPaths = {}
-	-- I need to look for {pack}/pack/*/opt/{pack_name}/lua/...
 	for _, packpath in ipairs(vim.opt.packpath:get()) do
 		local groupsPath = vim.fs.joinpath(packpath, 'pack')
 		if vim.fn.isdirectory(groupsPath) == 1 then
