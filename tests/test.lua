@@ -28,6 +28,8 @@ local function test()
 	local lzn = require('lz.n')
 	local auto_req = require('lzn-auto-require.loader')
 
+	_G.foo_four_loaded_count = 0
+
 	-- lz.n doesn't lazy load unless there is an "entry" condition
 	lzn.load({ "foo", after = function() print('foo.four loaded:', require('foo.four')) end, cmd = "Fake" })
 
@@ -37,6 +39,7 @@ local function test()
 	auto_req.register_loader()
 
 	assertEq(require('foo.four'), 4)
+	assertEq(foo_four_loaded_count, 1)
 end
 
 test()

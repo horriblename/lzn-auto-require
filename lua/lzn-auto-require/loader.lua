@@ -1,4 +1,6 @@
 local M = {}
+local lzn_state = require('lz.n.state')
+local lzn_loader = require('lz.n.loader')
 
 ---find_opt_file({'lua/x.lua'}) returns the first match of '(packpath)/pack/*/opt/{pack_name}/lua/x.lua'
 ---@param relPaths string[] @return string? pack_name, string? full_path
@@ -42,6 +44,25 @@ local function find_opt_file(relPaths)
 	return false, triedPaths
 end
 
+---@alias hook_key "before" | "after"
+
+---@param hook_key hook_key
+---@param plugin lz.n.Plugin
+local function hook(hook_key, plugin)
+	if type(plugin[hook_key]) == "function" then
+		xpcall(
+			plugin[hook_key],
+			vim.schedule_wrap(function(err)
+				vim.notify(
+					"Failed to run '" .. hook_key .. "' hook for " .. plugin.name .. ": " .. tostring(err or ""),
+					vim.log.levels.ERROR
+				)
+			end),
+			plugin
+		)
+	end
+end
+
 ---@param mod string
 ---@return nil|string|fun() loader
 function M.search(mod)
@@ -57,8 +78,16 @@ function M.search(mod)
 		return 'no file:\n    ' .. table.concat(file_path --[[ @as string[] ]], '\n    ')
 	end
 
-	require('lz.n').trigger_load(pack_name)
-	return assert(loadfile(file_path --[[@as string]]))
+	local plugin_spec = lzn_state[mod]
+	if not plugin_spec then
+		return assert(loadfile(file_path --[[@as string]]))
+	end
+
+	hook('before', plugin_spec)
+	package.loaded[mod] = assert(loadfile(file_path --[[@as string]]))
+	lzn_loader._load(plugin_spec)
+	hook('after', plugin_spec)
+	return package.loaded[mod]
 end
 
 function M.register_loader()
