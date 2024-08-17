@@ -78,7 +78,7 @@ function M.search(mod)
 		return 'no file:\n    ' .. table.concat(file_path --[[ @as string[] ]], '\n    ')
 	end
 
-	local plugin_spec = lzn_state[mod]
+	local plugin_spec = lzn_state.plugins[pack_name]
 	if not plugin_spec then
 		return assert(loadfile(file_path --[[@as string]]))
 	end
