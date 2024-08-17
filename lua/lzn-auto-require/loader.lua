@@ -63,7 +63,7 @@ local function hook(hook_key, plugin)
 end
 
 ---@param mod string
----@return nil|string|fun() loader
+---@return nil|string|fun():any loader
 function M.search(mod)
 	local segments = {}
 	for str in string.gmatch(mod, '[^.]+') do
@@ -82,11 +82,13 @@ function M.search(mod)
 		return assert(loadfile(file_path --[[@as string]]))
 	end
 
-	hook('before', plugin_spec)
-	package.loaded[mod] = assert(loadfile(file_path --[[@as string]]))
-	lzn_loader._load(plugin_spec)
-	hook('after', plugin_spec)
-	return package.loaded[mod]
+	return function()
+		hook('before', plugin_spec)
+		package.loaded[mod] = assert(loadfile(file_path --[[@as string]]))()
+		lzn_loader._load(plugin_spec)
+		hook('after', plugin_spec)
+		return package.loaded[mod]
+	end
 end
 
 function M.register_loader()
