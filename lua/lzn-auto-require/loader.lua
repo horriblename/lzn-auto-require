@@ -1,5 +1,4 @@
 local M = {}
-local lzn_state = require('lz.n.state')
 local lzn_loader = require('lz.n.loader')
 
 ---find_opt_file({'lua/x.lua'}) returns the first match of '(packpath)/pack/*/opt/{pack_name}/lua/x.lua'
@@ -43,8 +42,6 @@ local function find_opt_file(relPaths)
 	return false, triedPaths
 end
 
----@alias hook_key "before" | "after"
-
 ---@param hook_key hook_key
 ---@param plugin lz.n.Plugin
 local function hook(hook_key, plugin)
@@ -77,7 +74,7 @@ function M.search(mod)
 		return 'no file:\n    ' .. table.concat(file_path --[[ @as string[] ]], '\n    ')
 	end
 
-	local plugin_spec = lzn_state.plugins[pack_name]
+	local plugin_spec = require('lz.n').lookup(pack_name)
 	if not plugin_spec then
 		return assert(loadfile(file_path --[[@as string]]))
 	end
