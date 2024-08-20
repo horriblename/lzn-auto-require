@@ -7,12 +7,14 @@ local project_dir = vim.fn.getcwd()
 
 local function assertEq(a, b, ...)
 	if a ~= b then
+		local hint = ''
 		if select("#", ...) > 0 then
-			print("Hint", ...)
+			hint = table.concat({ 'Hint: ', ... }, ' ')
 		end
 		local msg = string.format([[assertion a == b failed:
 		a = %s
-		b = %s]], vim.inspect(a), vim.inspect(b)
+		b = %s
+	%s]], vim.inspect(a), vim.inspect(b), hint
 		)
 		error(msg)
 	end
@@ -50,7 +52,8 @@ local function test()
 
 	auto_req.register_loader()
 
-	assertEq(require('foo.four'), 4)
+	assertEq(require('foo.four'), 4, "assert module foo.four returns 4")
+	assertEq(_G.plugin_triggered, true, 'assert plugin/foo.lua is run')
 	assertEq(foo_four_loaded_count, 1, 'assert module only evaluated once')
 	assertEq(_G.before_triggered, true, 'assert "before" hook is triggered')
 	assertEq(_G.after_triggered, true, 'assert "after" hook is triggered')
