@@ -1,5 +1,4 @@
 local M = {}
-local lzn_state = require('lz.n.state')
 local lzn_loader = require('lz.n.loader')
 
 ---find_opt_file({'lua/x.lua'}) returns the first match of '(packpath)/pack/*/opt/{pack_name}/lua/x.lua'
@@ -43,8 +42,7 @@ local function find_opt_file(relPaths)
 	return false, triedPaths
 end
 
----@alias hook_key "before" | "after"
-
+-- copied from lz.n
 ---@param hook_key hook_key
 ---@param plugin lz.n.Plugin
 local function hook(hook_key, plugin)
@@ -77,13 +75,16 @@ function M.search(mod)
 		return 'no file:\n    ' .. table.concat(file_path --[[ @as string[] ]], '\n    ')
 	end
 
-	local plugin_spec = lzn_state.plugins[pack_name]
+	local plugin_spec = require('lz.n').lookup(pack_name)
 	if not plugin_spec then
 		return assert(loadfile(file_path --[[@as string]]))
 	end
 
 	return function()
 		hook('before', plugin_spec)
+		-- HACK: it's probably more correct to do _load then loadfile, but if we do
+		-- that and mod is required somewhere in _load (i.e. a plugin/*.lua script), we
+		-- get an import loop error
 		package.loaded[mod] = assert(loadfile(file_path --[[@as string]]))()
 		lzn_loader._load(plugin_spec)
 		hook('after', plugin_spec)
