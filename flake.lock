@@ -3,15 +3,16 @@
     "lz-n": {
       "flake": false,
       "locked": {
-        "lastModified": 1724097448,
-        "narHash": "sha256-cbuxAh/ZGsaVnyG8r7N66sMgazVA4vFK46lEQdrYKGA=",
+        "lastModified": 1724103261,
+        "narHash": "sha256-zmAJ4Wqv9FBZNLZdjEWzkICVRZKrykK+qTvlHJZLMLU=",
         "owner": "nvim-neorocks",
         "repo": "lz.n",
-        "rev": "c2e5c361ede64aeb0f05a0cc3e28daa1ccb70ee9",
+        "rev": "de1e21d3a4fd69940122d293b8c7a9814085a793",
         "type": "github"
       },
       "original": {
         "owner": "nvim-neorocks",
+        "ref": "rm-state",
         "repo": "lz.n",
         "type": "github"
       }
