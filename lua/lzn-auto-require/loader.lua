@@ -42,6 +42,7 @@ local function find_opt_file(relPaths)
 	return false, triedPaths
 end
 
+-- copied from lz.n
 ---@param hook_key hook_key
 ---@param plugin lz.n.Plugin
 local function hook(hook_key, plugin)
@@ -81,6 +82,9 @@ function M.search(mod)
 
 	return function()
 		hook('before', plugin_spec)
+		-- HACK: it's probably more correct to do _load then loadfile, but if we do
+		-- that and mod is required somewhere in _load (i.e. a plugin/*.lua script), we
+		-- get an import loop error
 		package.loaded[mod] = assert(loadfile(file_path --[[@as string]]))()
 		lzn_loader._load(plugin_spec)
 		hook('after', plugin_spec)
