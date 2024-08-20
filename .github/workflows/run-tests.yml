@@ -1,0 +1,19 @@
+name: Run Tests
+
+on:
+  pull_request:
+  push:
+    branches: [ "master" ]
+
+  workflow_dispatch:
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: DeterminateSystems/nix-installer-action@main
+
+      - name: Run tests
+        run: nix run .#run-lzn-test

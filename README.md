@@ -21,6 +21,11 @@ require('lzn-auto-require.loader').register_loader()
 After registering the loader, any call to `require` will also look for the lua module in
 `(packpath)/opt/*/lua`.
 
+## Nix
+
+The flake is currently only used for development. Please build this plugin normally with
+`buildVimPlugin` as shown in [nixos wiki](https://wiki.nixos.org/wiki/Vim#Add_a_new_custom_plugin_to_the_users_packages)
+
 # Acknowledgements
 
 Thank you to the lz.n authors for their great work!
