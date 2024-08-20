@@ -54,6 +54,8 @@ local function test()
 	assertEq(foo_four_loaded_count, 1, 'assert module only evaluated once')
 	assertEq(_G.before_triggered, true, 'assert "before" hook is triggered')
 	assertEq(_G.after_triggered, true, 'assert "after" hook is triggered')
+
+	print("test passed")
 end
 
 test()
