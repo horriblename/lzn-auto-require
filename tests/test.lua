@@ -45,7 +45,7 @@ local function test()
 		cmd = "Fake",
 	})
 
-	assert(require('lz.n.state').plugins.foo, 'state: ' .. vim.inspect(require('lz.n.state')))
+	assert(require('lz.n').lookup('foo'), 'plugin "foo" not loaded in lz.n')
 
 	local ok, value = pcall(require, 'foo.four')
 	assertEq(ok, false, "got value:", value, "rtp:", vim.inspect(vim.opt.runtimepath:get()))
