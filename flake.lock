@@ -1,0 +1,44 @@
+{
+  "nodes": {
+    "lz-n": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1724097448,
+        "narHash": "sha256-cbuxAh/ZGsaVnyG8r7N66sMgazVA4vFK46lEQdrYKGA=",
+        "owner": "nvim-neorocks",
+        "repo": "lz.n",
+        "rev": "c2e5c361ede64aeb0f05a0cc3e28daa1ccb70ee9",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nvim-neorocks",
+        "repo": "lz.n",
+        "type": "github"
+      }
+    },
+    "nixpkgs": {
+      "locked": {
+        "lastModified": 1723991338,
+        "narHash": "sha256-Grh5PF0+gootJfOJFenTTxDTYPidA3V28dqJ/WV7iis=",
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "8a3354191c0d7144db9756a74755672387b702ba",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nixos",
+        "ref": "nixos-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "root": {
+      "inputs": {
+        "lz-n": "lz-n",
+        "nixpkgs": "nixpkgs"
+      }
+    }
+  },
+  "root": "root",
+  "version": 7
+}
