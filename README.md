@@ -1,7 +1,6 @@
 # lz.n auto require
 
-Implements a simple lua module loader that searches opt plugins and call
-[lz.n](https://github.com/nvim-neorocks/lz.n) hooks to ensure proper plugin initialization.
+Overrides `require` to also search for plugins in `{packpath}/*/opt` and load them with `lz.n`
 
 ## Usage
 
@@ -9,7 +8,7 @@ Place this code somewhere in your config, and call it as **late** as possible (e
 of your init.lua). 
 
 ```lua
-require('lzn-auto-require.loader').register_loader()
+require('lzn-auto-require').enable()
 ```
 
 > [!TIP]
