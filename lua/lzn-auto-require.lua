@@ -48,7 +48,8 @@ local builtin_require = nil
 ---@param mod string
 ---@return any
 local function require(mod)
-	local ok, value = pcall(assert(builtin_require), mod)
+	assert(builtin_require)
+	local ok, value = pcall(builtin_require, mod)
 	if ok then
 		return value
 	end
