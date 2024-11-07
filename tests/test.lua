@@ -30,7 +30,7 @@ local function test()
 	print('--------------------')
 
 	local lzn = require('lz.n')
-	local auto_req = require('lzn-auto-require.loader')
+	local auto_req = require('lzn-auto-require')
 
 	_G.foo_four_loaded_count = 0
 
@@ -50,7 +50,7 @@ local function test()
 	local ok, value = pcall(require, 'foo.four')
 	assertEq(ok, false, "got value:", value, "rtp:", vim.inspect(vim.opt.runtimepath:get()))
 
-	auto_req.register_loader()
+	auto_req.enable()
 
 	assertEq(require('foo.four'), 4, "assert module foo.four returns 4")
 	assertEq(_G.plugin_triggered, true, 'assert plugin/foo.lua is run')
