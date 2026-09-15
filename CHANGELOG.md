@@ -5,7 +5,8 @@
 
 ### ⚠ BREAKING CHANGES
 
-* **deps:** bump lz.n constraint to ~>3
+* **deps:** bump lz.n constraint to ~>3 (requires neovim >=0.11)
+* dropped deprecated API
 
 ### Features
 
